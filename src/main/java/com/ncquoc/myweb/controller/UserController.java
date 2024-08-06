@@ -2,6 +2,7 @@ package com.ncquoc.myweb.controller;
 
 import com.ncquoc.myweb.domain.User;
 import com.ncquoc.myweb.service.UserService;
+import com.ncquoc.myweb.service.error.IdInvalidException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +25,12 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     }
 
+
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable("id") Long id){
+    public ResponseEntity<String> deleteUser(@PathVariable("id") Long id) throws IdInvalidException{
+        if(id >1500){
+            throw new IdInvalidException("id khong lon hon 1500");
+        }
         this.userService.handleDeleteUser(id);
         return ResponseEntity.ok("deleted");
     }
